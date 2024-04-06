@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -92,13 +91,7 @@ func LoginUserHandler(db *sql.DB) gin.HandlerFunc {
 			return
 
 		}
-		err = godotenv.Load()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": "failed to load env file",
-			})
-			return
-		}
+
 		key := os.Getenv("secret_key")
 		key_byte := []byte(key)
 		token := jwt.New(jwt.SigningMethodHS256)

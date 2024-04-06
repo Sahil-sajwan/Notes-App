@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/joho/godotenv"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -18,13 +17,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			})
 			return
 		}
-		err := godotenv.Load()
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-				"message": "failed to get key",
-			})
-			return
-		}
+
 		key := os.Getenv("secret_key")
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return []byte(key), nil
