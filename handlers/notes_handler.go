@@ -55,7 +55,7 @@ func GetNotesHandler(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 		var note models.Note
-		var notes []models.Note
+		notes := []models.Note{}
 		for rows.Next() {
 			rows.Scan(&note.ID, &note.Title, &note.Content)
 			notes = append(notes, note)
