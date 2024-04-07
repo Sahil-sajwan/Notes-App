@@ -69,6 +69,7 @@ func GetNotesByIdHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var id int
 		var err error
+
 		id, err = strconv.Atoi(c.Param("id"))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -84,6 +85,7 @@ func GetNotesByIdHandler(db *sql.DB) gin.HandlerFunc {
 			})
 			return
 		}
+
 		var note models.Note
 		err = row.Scan(&note.ID, &note.Title, &note.Content)
 
@@ -103,6 +105,7 @@ func DeleteNoteHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var id int
 		var err error
+
 		id, err = strconv.Atoi(c.Param("id"))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
