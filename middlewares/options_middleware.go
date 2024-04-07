@@ -11,7 +11,7 @@ func OptionsMiddleware() gin.HandlerFunc {
 
 		if c.Request.Method == http.MethodOptions {
 			// Handle OPTIONS request
-			c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
+			c.Header("Access-Control-Allow-Origin", "*")
 			c.Header("Access-Control-Allow-Methods", "POST, GET, DELETE")
 			c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 			c.Header("Access-Control-Max-Age", "600")
