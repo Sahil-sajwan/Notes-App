@@ -72,21 +72,24 @@ func LoginUserHandler(db *sql.DB) gin.HandlerFunc {
 		var username, password string
 		err := row.Scan(&username, &password)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": "server error",
-			})
+
+			if err != sql.ErrNoRows {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"message": "server error",
+				})
+
+			} else {
+				c.JSON(http.StatusUnauthorized, gin.H{
+					"message": "username does not exist",
+				})
+
+			}
 			return
+
 		}
 		if err := bcrypt.CompareHashAndPassword([]byte(password), []byte(body.Password)); err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"message": "wrong password",
-			})
-			return
-
-		}
-		if len(username) == 0 {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"message": "username does not exist",
 			})
 			return
 

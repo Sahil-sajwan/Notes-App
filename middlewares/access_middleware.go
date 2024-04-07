@@ -16,6 +16,7 @@ func AccessMiddleware(db *sql.DB) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "error in converting route parameter to integer",
 			})
+			return
 		}
 		query := `SELECT username FROM notes WHERE id=$1`
 		row := db.QueryRow(query, id)
