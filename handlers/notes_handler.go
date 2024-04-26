@@ -75,6 +75,7 @@ func GetNotesByIdHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "error in converting route parameter to integer",
 			})
+			return
 		}
 		query := `SELECT id, title, content FROM notes WHERE id=$1`
 		row := db.QueryRow(query, id)
@@ -111,6 +112,7 @@ func DeleteNoteHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "error in converting route parameter to integer",
 			})
+			return
 		}
 		query := `DELETE FROM notes WHERE id=$1`
 		_, err = db.Exec(query, id)
@@ -119,9 +121,41 @@ func DeleteNoteHandler(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "error while deleting note from database",
 			})
+			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"message": "note successfully deleted",
+		})
+
+	}
+}
+
+func EditNoteHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var id int
+		var err error
+		var note models.Note
+		c.Bind(&note)
+		id, err = strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "error in converting route parameter to integer",
+			})
+			return
+		}
+		query := `UPDATE notes
+		SET title = $1, content = $2
+		WHERE id=$3;`
+		_, err = db.Exec(query, note.Title, note.Content, id)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "error while updating note",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": "note successfully updated",
 		})
 
 	}

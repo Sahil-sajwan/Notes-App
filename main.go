@@ -33,7 +33,8 @@ func main() {
 	protectedRoutes.GET("/notes", handlers.GetNotesHandler(db))
 	protectedRoutes.GET("/notes/:id", middlewares.AccessMiddleware(db), handlers.GetNotesByIdHandler(db))
 	protectedRoutes.DELETE("/notes/:id", middlewares.AccessMiddleware(db), handlers.DeleteNoteHandler(db))
-	//r.POST("/notes", middlewares.AuthMiddleware(), handlers.PostNoteHandler(db))
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	protectedRoutes.PUT("/notes/:id", middlewares.AccessMiddleware(db), handlers.EditNoteHandler(db))
+
+	r.Run()
 
 }
